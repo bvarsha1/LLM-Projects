@@ -1,0 +1,30 @@
+[project]
+name = "semantic-cache-engine"
+version = "0.1.0"
+description = "A thread-safe pluggable semantic cache with LRU/LFU eviction policies, FAISS vector indexing, and Loguru logging."
+readme = "README.md"
+requires-python = ">=3.11"  # NumPy 2.x standardizes on Python 3.11+ for baseline builds
+license = { text = "MIT" }
+authors = [
+    { name = "Varsha Boobna", email = "varsha@example.com" }
+]
+
+# Core production dependencies required when clients install your library
+dependencies = [
+    "numpy>=2.4.5",
+    "faiss-cpu>=1.8.0",
+    "pydantic>=2.13.4",
+    "loguru>=0.7.3"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0.0"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/semantic_cache_engine"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
