@@ -1,0 +1,46 @@
+name: Sync Data Generator Subdirectory to Hugging Face Spaces
+
+on:
+  push:
+    branches: [ main ]
+    # 🔍 Runs ONLY when changes are made inside this specific project folder
+    paths:
+      - 'synthetic-data-generator-space/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract and Push Project Subdirectory
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          
+          TARGET_PROJECT_FOLDER="synthetic-data-generator-space"
+          
+          mkdir ../hf_deploy_workspace
+          cp -r $TARGET_PROJECT_FOLDER/. ../hf_deploy_workspace/
+          
+          cd ../hf_deploy_workspace
+          
+          # 1. Initialize the repository
+          git init
+          
+          # Force the local branch name to be 'main'
+          git checkout -b main
+          
+          # 2. Add and commit the isolated files
+          git add .
+          git commit -m "Automated deployment synchronization snapshot from GitHub Actions Monorepo"
+          
+          # 3. Establish the remote and push
+          git remote add space https://thefrugaltechie:$HF_TOKEN@huggingface.co/spaces/thefrugaltechie/synthetic-data-generator
+          git push space main:main --force
