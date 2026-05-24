@@ -36,4 +36,4 @@ jobs:
           
           # 🎯 UPDATED: Points exactly to your target space path
           git remote add space https://thefrugaltechie:$HF_TOKEN@huggingface.co/spaces/thefrugaltechie/synthetic-docs-generator
-          git push space master:main --force
+          git push space main:main --force
