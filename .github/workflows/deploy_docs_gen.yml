@@ -20,7 +20,7 @@ jobs:
       - name: Extract and Push Project Subdirectory
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
+run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           
@@ -30,10 +30,17 @@ jobs:
           cp -r $TARGET_PROJECT_FOLDER/. ../hf_deploy_workspace/
           
           cd ../hf_deploy_workspace
+          
+          # 1. Initialize the repository
           git init
+          
+          # Force the local branch name to be 'main'
+          git checkout -b main
+          
+          # 2. Add and commit the isolated files
           git add .
           git commit -m "Automated deployment synchronization snapshot from GitHub Actions Monorepo"
           
-          # 🎯 UPDATED: Points exactly to your target space path
+          # 3. Establish the remote and push
           git remote add space https://thefrugaltechie:$HF_TOKEN@huggingface.co/spaces/thefrugaltechie/synthetic-docs-generator
           git push space main:main --force
